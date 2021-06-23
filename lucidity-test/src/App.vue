@@ -5,33 +5,23 @@
         <p class="title">Your profile</p>
         <div class="flex-container input-row">
           <div class="left-input">
-            <label class="input-label text" for="firstname">First name</label>
-            <input
-              type="text"
-              class="text-input text"
-              id="firstname"
-              v-model="firstName"
-            />
+            <InputText label="First name" id="Firstname" v-model="firstName" />
           </div>
           <div class="right-input">
-            <label class="input-label text" for="lastname">Last name</label>
-            <font-awesome-icon class="help" icon="question-circle" />
-            <input
-              type="text"
-              class="text-input text"
+            <InputText
+              label="Last name"
               id="lastname"
               v-model="lastName"
+              help="Last name"
             />
           </div>
         </div>
         <div class="input-row">
-          <label class="input-label text" for="email">Email Address</label>
-          <font-awesome-icon class="help" icon="question-circle" />
-          <input
-            type="text"
-            class="text-input full-width text"
+          <InputText
+            label="Email Address"
             id="email"
             v-model="emailAddress"
+            help="Email address"
           />
         </div>
         <div>
@@ -52,9 +42,11 @@
 </template>
 
 <script>
+import InputText from "./components/InputText";
+
 export default {
   name: "App",
-  components: {},
+  components: { InputText },
   data() {
     return {
       firstName: "",
@@ -90,32 +82,12 @@ body,
 
 .profile-form {
   width: 664px;
-  height: 518px;
   border: 1px solid #d9d2e7;
   box-sizing: border-box;
   border-radius: 4px;
   background: #ffffff;
   padding: 32px;
   margin: 0 auto;
-}
-
-.input-label {
-  font-size: 15px;
-  line-height: 21px;
-  color: #605871;
-  margin-bottom: 4px;
-}
-
-.text-input {
-  background: #ffffff;
-  border: 1px solid #b2a6c9;
-  box-sizing: border-box;
-  border-radius: 4px;
-  font-size: 16px;
-  line-height: 24px;
-  color: #000000;
-  height: 40px;
-  width: 100%;
 }
 
 .title {
@@ -210,10 +182,6 @@ img {
 
 .right-input {
   flex-basis: 50%;
-}
-
-.full-width {
-  width: 100%;
 }
 
 .help {
