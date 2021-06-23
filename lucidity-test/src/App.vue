@@ -1,11 +1,17 @@
 <template>
   <div id="app">
     <div class="your-profile">
-      <form class="profile-form">
+      <form @submit.prevent="submit" class="profile-form">
         <p class="title">Your profile</p>
         <div class="flex-container input-row">
           <div class="left-input">
-            <InputText label="First name" id="Firstname" v-model="firstName" />
+            <InputText
+              label="First name"
+              id="Firstname"
+              v-model="firstName"
+              :error="firstNameError"
+              :disabled="disabled"
+            />
           </div>
           <div class="right-input">
             <InputText
@@ -13,6 +19,8 @@
               id="lastname"
               v-model="lastName"
               help="Last name"
+              :error="lastNameError"
+              :disabled="disabled"
             />
           </div>
         </div>
@@ -22,6 +30,8 @@
             id="email"
             v-model="emailAddress"
             help="Email address"
+            :error="emailError"
+            :disabled="disabled"
           />
         </div>
         <div>
@@ -35,7 +45,8 @@
           </div>
           <p class="remove-text text">Remove existing image</p>
         </div>
-        <button class="submit-button button">Save changes</button>
+        <button type="submit" :class="dynamicDisabledClass" :disable="disabled">Save changes</button>
+        <p v-if="submitted" class="success text">Changes saved successfully</p>
       </form>
     </div>
   </div>
@@ -54,7 +65,57 @@ export default {
       emailAddress: "",
       imageSrc:
         "http://ghost.skillshub.info/content/images/2017/01/profile-girl-square.png",
+      currentErrors: {
+        first: false,
+        last:false,
+        email:false
+      },
+      submitted: false,
+      disabled: false,
     };
+  },
+  computed: {
+    firstNameError() {
+      return this.currentErrors.first ? "Invalid first name" : "";
+    },
+    lastNameError() {
+      return this.currentErrors.last ? "Invalid last name" : "";
+    },
+    emailError() {
+      return this.currentErrors.email ? "Invalid email address" : "";
+    },
+    dynamicDisabledClass() {
+      const baseClasses = "submit-button button";
+      return this.disabled ? "disabled-button " + baseClasses : baseClasses;
+    }
+  },
+  methods: {
+    submit() {
+      const valid = this.validate();
+      if (!valid) {
+        return;
+      } else {
+        this.disabled = true;
+        setTimeout(() => {
+          this.disabled = false;
+          this.submitted = true;
+        }, 3000);
+      }
+    },
+    validate() {
+      this.currentErrors.first = this.validateLength(this.firstName);
+      this.currentErrors.last = this.validateLength(this.lastName);
+      this.currentErrors.email =
+        this.validateLength(this.emailAddress) || this.validateEmail();
+      return !this.currentErrors.first && !this.currentErrors.last && !this.currentErrors.email;
+    },
+    validateLength(val) {
+      return val.length < 2 || val.legnth > 255;
+    },
+    validateEmail() {
+      const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return !emailRegex.test(this.emailAddress.toLowerCase());
+    },
   },
 };
 </script>
@@ -184,13 +245,20 @@ img {
   flex-basis: 50%;
 }
 
-.help {
-  color: #d9d2e7;
-  float: right;
-}
-
 .upload {
   margin-top: 8px;
+}
+
+.success {
+  line-height: 27px;
+  color: green;
+  margin-bottom: 0;
+}
+
+.disabled-button {
+  background: #f2eff8;;
+  cursor: not-allowed;
+  color: grey;
 }
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap");
 </style>
