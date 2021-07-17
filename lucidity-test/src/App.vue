@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <div class="your-profile">
-      <form @submit.prevent="submit" class="profile-form">
-        <p class="title">Your profile</p>
-        <div class="flex-container input-row">
-          <div class="left-input">
+      <form @submit.prevent="submit" class="your-profile__form">
+        <h1 class="your-profile__form-title">Your profile</h1>
+        <div class="flex-container-row">
+          <div class="flex-container__row-item flex-container__row-item--left">
             <InputText
               label="First name"
               id="Firstname"
@@ -13,7 +13,7 @@
               :disabled="disabled"
             />
           </div>
-          <div class="right-input">
+          <div class="flex-container__row-item flex-container__row-item--right">
             <InputText
               label="Last name"
               id="lastname"
@@ -24,7 +24,7 @@
             />
           </div>
         </div>
-        <div class="input-row">
+        <div class="flex-container__row-item">
           <InputText
             label="Email Address"
             id="email"
@@ -35,18 +35,29 @@
           />
         </div>
         <div>
-          <p class="image-text text">Your photo (Recommended size 200px)</p>
-          <font-awesome-icon class="help" icon="question-circle" />
-          <div class="flex-container upload">
+          <label class="your-profile__image-text"
+            >Your photo (Recommended size 200px)</label
+          >
+          <font-awesome-icon
+            class="your-profile__help-icon"
+            icon="question-circle"
+          />
+          <div class="flex-container-row your-profile__upload">
             <img :src="imageSrc" />
-            <div class="upload-container">
-              <button class="upload-button button">Upload new image</button>
+            <div class="your-profile__upload-button-container">
+              <button class="your-profile__upload-button">
+                Upload new image
+              </button>
             </div>
           </div>
-          <p class="remove-text text">Remove existing image</p>
+          <p class="your-profile__upload-remove-text">Remove existing image</p>
         </div>
-        <button type="submit" :class="dynamicDisabledClass" :disable="disabled">Save changes</button>
-        <p v-if="submitted" class="success text">Changes saved successfully</p>
+        <button type="submit" :class="dynamicDisabledClass" :disable="disabled">
+          Save changes
+        </button>
+        <p v-if="submitted" class="your-profile__success">
+          Changes saved successfully
+        </p>
       </form>
     </div>
   </div>
@@ -67,8 +78,8 @@ export default {
         "http://ghost.skillshub.info/content/images/2017/01/profile-girl-square.png",
       currentErrors: {
         first: false,
-        last:false,
-        email:false
+        last: false,
+        email: false,
       },
       submitted: false,
       disabled: false,
@@ -85,9 +96,11 @@ export default {
       return this.currentErrors.email ? "Invalid email address" : "";
     },
     dynamicDisabledClass() {
-      const baseClasses = "submit-button button";
-      return this.disabled ? "disabled-button " + baseClasses : baseClasses;
-    }
+      const baseClasses = "button your_profile__submit-button";
+      return this.disabled
+        ? baseClasses + " " + baseClasses + "--disabled"
+        : baseClasses;
+    },
   },
   methods: {
     submit() {
@@ -107,7 +120,11 @@ export default {
       this.currentErrors.last = this.validateLength(this.lastName);
       this.currentErrors.email =
         this.validateLength(this.emailAddress) || this.validateEmail();
-      return !this.currentErrors.first && !this.currentErrors.last && !this.currentErrors.email;
+      return (
+        !this.currentErrors.first &&
+        !this.currentErrors.last &&
+        !this.currentErrors.email
+      );
     },
     validateLength(val) {
       return val.length < 2 || val.legnth > 255;
@@ -127,21 +144,18 @@ body,
   margin: 0;
   padding: 0;
   height: 100%;
-}
-
-.text {
   font-family: Source Sans Pro;
   font-style: normal;
   font-weight: 600;
 }
 
 .your-profile {
-  background: #e5e5e5;
+  background: #f7f5fc;
   padding-top: 40px;
   height: 100%;
 }
 
-.profile-form {
+.your-profile__form {
   width: 664px;
   border: 1px solid #d9d2e7;
   box-sizing: border-box;
@@ -151,7 +165,7 @@ body,
   margin: 0 auto;
 }
 
-.title {
+.your-profile__form-title {
   font-family: Montserrat;
   font-style: normal;
   font-weight: bold;
@@ -162,16 +176,16 @@ body,
   margin-top: 0;
 }
 
-.image-text {
+.your-profile__image-text {
   font-size: 15px;
   line-height: 21px;
   color: #605871;
   margin-top: 0;
   margin-bottom: 8px;
-  display: inline;
+  display: inline-block;
 }
 
-.remove-text {
+.your-profile__upload-remove-text {
   font-size: 15px;
   line-height: 27px;
   color: #e0004d;
@@ -188,7 +202,7 @@ img {
   margin-right: 32px;
 }
 
-.upload-container {
+.your-profile__upload-button-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -197,11 +211,11 @@ img {
   border-radius: 4px;
 }
 
-.flex-container {
+.flex-container-row {
   display: flex;
 }
 
-.button {
+button {
   font-family: Montserrat;
   font-style: normal;
   font-weight: bold;
@@ -209,7 +223,7 @@ img {
   text-align: center;
 }
 
-.upload-button {
+.your-profile__upload-button {
   width: 162px;
   height: 40px;
   line-height: 26px;
@@ -219,9 +233,10 @@ img {
   box-sizing: border-box;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.08);
   border-radius: 4px;
+  font-weight: 400;
 }
 
-.submit-button {
+.your_profile__submit-button {
   background: linear-gradient(111.77deg, #e92a6c 0%, #2e008b 100%);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.15);
   border-radius: 4px;
@@ -230,35 +245,38 @@ img {
   border-color: transparent;
   width: 132px;
   height: 40px;
+  border: 0;
+  font-weight: 600;
 }
 
-.input-row {
+.flex-container__row-item {
   margin-bottom: 32px;
 }
 
-.left-input {
+.flex-container__row-item--left {
   margin-right: 16px;
   flex-basis: 50%;
 }
 
-.right-input {
+.flex-container__row-item--right {
   flex-basis: 50%;
 }
 
-.upload {
-  margin-top: 8px;
-}
-
-.success {
+.your-profile__success {
   line-height: 27px;
   color: green;
   margin-bottom: 0;
 }
 
-.disabled-button {
-  background: #f2eff8;;
+.your_profile__submit-button--disabled {
+  background: #f2eff8;
   cursor: not-allowed;
   color: grey;
+}
+
+.your-profile__help-icon {
+  color: #d9d2e7;
+  float: right;
 }
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap");
 </style>

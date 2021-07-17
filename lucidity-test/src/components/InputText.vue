@@ -1,14 +1,18 @@
 <template>
-  <div class="row">
-    <div v-if="error" class="error-line"></div>
-    <div class="col">
-      <div v-if="error" class="error-container">
+  <div class="input-text">
+    <div v-if="error" class="input-text__error-line"></div>
+    <div class="input-text__content">
+      <div v-if="error" class="input-text__error-container">
         <font-awesome-icon icon="exclamation-triangle" />
-        <p class="error-text text">{{ error }}</p>
+        <p class="input-text__error-text">{{ error }}</p>
       </div>
       <div>
-        <label class="input-label text" :for="id">{{ label }}</label>
-        <font-awesome-icon v-if="help" class="help" icon="question-circle" />
+        <label class="input-text__label" :for="id">{{ label }}</label>
+        <font-awesome-icon
+          v-if="help"
+          class="input-text__help-icon"
+          icon="question-circle"
+        />
         <input
           type="text"
           :class="dynamicDisabledClass"
@@ -51,28 +55,25 @@ export default {
   },
   computed: {
     dynamicDisabledClass() {
-      const baseClasses = "text-input text";
-      return this.disabled ? baseClasses + " disabled" : baseClasses;
+      const baseClasses = "input-text__input";
+      return this.disabled
+        ? baseClasses + " " + baseClasses + "--disabled"
+        : baseClasses;
     },
   },
 };
 </script>
 
-<style>
-.text {
-  font-family: Source Sans Pro;
-  font-style: normal;
-  font-weight: 600;
-}
-
-.input-label {
+<style scoped>
+.input-text__label {
+  display: inline-block;
   font-size: 15px;
   line-height: 21px;
   color: #605871;
   margin-bottom: 4px;
 }
 
-.text-input {
+.input-text__input {
   background: #ffffff;
   border: 1px solid #b2a6c9;
   box-sizing: border-box;
@@ -82,9 +83,11 @@ export default {
   color: #000000;
   height: 40px;
   width: 100%;
+  padding: 8px 16px;
+  font-weight: 400;
 }
 
-.help {
+.input-text__help-icon {
   color: #d9d2e7;
   float: right;
 }
@@ -93,16 +96,20 @@ export default {
   border: 3px solid #9c72f0;
 }
 
-.disabled {
+.text-input:focus:not(.disabled) {
+  border: 3px solid #9c72f0;
+}
+
+.input-text__input--disabled {
   background: #f2eff8;
 }
 
-.error-text {
+.input-text__error-text {
   line-height: 21px;
   margin: 0 0 0 8px;
 }
 
-.error-container {
+.input-text__error-container {
   display: flex;
   flex-direction: row;
   color: #e0004d;
@@ -110,18 +117,21 @@ export default {
   margin-bottom: 8px;
 }
 
-.row {
+.input-text {
   display: flex;
   flex-direction: row;
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
 }
 
-.error-line {
+.input-text__error-line {
   margin-right: 18px;
   border-left: 6px solid #e0004d;
   min-height: 100%;
 }
 
-.col {
+.input-text__content {
   display: flex;
   flex-direction: column;
   width: 100%;
